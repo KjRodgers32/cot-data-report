@@ -4,9 +4,20 @@ import psycopg2
 import cot_reports as cot
 import pandas as pd
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
+from dotenv import dotenv_values
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+config = dotenv_values(".env")
+
+LOGGING_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
+
+DB_HOST = config['DB_HOST']
+DB_PASS = config['DB_PASS']
+DB_USER = config['DB_USER']
+DB = config['DB']
+PORT = 5432
+POSTGRES_URL = f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{PORT}/{DB}'
+TABLE_NAME = 'futures_data'
 
 list_of_pairs = [
     r'GOLD - COMMODITY EXCHANGE INC.',
@@ -41,46 +52,50 @@ columns = [
     '% of OI-Noncommercial-Spreading (Old)'
 ]
 
+def get_futures_data() -> pd.DataFrame:
+      """ Calls cot api and returns pandas dataframe of historical futures data
+      from 1986-latest_date """
+      return cot.cot_all(cot_report_type='legacy_fut', store_txt=False)
+
 # Returns pd.DataFrame of futures data from 1986-latest_date
-df = cot.cot_all(cot_report_type='legacy_fut', store_txt=False)
+def main() -> None:
+    logging.basicConfig(level=logging.INFO, format=LOGGING_FORMAT)
+    
+    logging.info('Fetchng COT data...')
+    df = get_futures_data()
+    logging.info('Fetching Successful!')
 
-logging.info('Formatting cot file...')
+    logging.info('Formatting COT file...')
+    fx_data = df[(df['Market and Exchange Names'].str.contains('CHICAGO MERCANTILE') 
+                | df['Market and Exchange Names'].str.contains('USD INDEX - ICE FUTURES')) &
+                (df['Market and Exchange Names'].isin(list_of_pairs))]
+    fx_final_report_data = fx_data[columns]
+    logging.info('Formatting Successful!')
 
-fx_data = df[(df['Market and Exchange Names'].str.contains('CHICAGO MERCANTILE') 
-             | df['Market and Exchange Names'].str.contains('USD INDEX - ICE FUTURES')) &
-             (df['Market and Exchange Names'].isin(list_of_pairs))]
-fx_final_report_data = fx_data[columns]
-
-logging.info('Sucessfully formatted cot file!')
-
-logging.info('Connecting to database...')
-try:
-    engine = create_engine('postgresql://root:root@pgdatabase:5432/cot_data')
-    command = pd.io.sql.get_schema(fx_final_report_data.head(1),name='futures_data', con=engine)
-
-    conn = psycopg2.connect('postgresql://root:root@pgdatabase:5432/cot_data')
-    cur = conn.cursor()
-
-    logging.info('Connected to the database!')
-
+    logging.info('Connecting to database...')
     try:
-        logging.info('Writing to database...')
+        engine = create_engine(POSTGRES_URL)
 
-        cur.execute(command)
+        with engine.connect() as conn:
+            logging.info('Connection Successful!')
 
-        cur.close()
-        conn.commit()
+            logging.info('Creating table schema...')
+            command = pd.io.sql.get_schema(fx_final_report_data.head(1),name=TABLE_NAME, con=engine)
+             
+            with conn.begin():
+                conn.execute(text(command))
+                logging.info('Created Schema Successful!')
 
-        fx_final_report_data.to_sql(con=engine, name='futures_data',if_exists='replace', index=False)
+            logging.info('Writing data to database...')
+            fx_final_report_data.to_sql(con=engine, name='futures_data',if_exists='replace', index=False)
+            logging.info('Write Successful!')
 
-        logging.info('Files successfully in database!')
-    finally:
-        conn.close()
-        cur.close()
-
-except psycopg2.OperationalError as e:
-        logging.error(f'Failed to connect to database...')
-        raise(e)
-except Exception as e:
-        logging.error(f'Failed during data ingestiong...')
-        raise(e)
+    except psycopg2.OperationalError as e:
+            logging.error(f'Failed to connect to database...')
+            raise(e)
+    except Exception as e:
+            logging.error(f'Failed during data ingestiong...')
+            raise(e)
+    
+if __name__ == '__main__':
+      main()
