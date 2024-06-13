@@ -1,3 +1,4 @@
+// comment
 const ALL_XAU_DATA = `select * from futures_data 
 where "Market and Exchange Names" = 'GOLD - COMMODITY EXCHANGE INC.';`;
 
