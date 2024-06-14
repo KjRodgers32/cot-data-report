@@ -5,12 +5,15 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAllRecentPairs } from "./hooks/useAllRecentPairs";
+import { useRecentDataOfPair } from "./hooks/useRecentDataOfPair";
 import CardSkeleton from "./components/UI/CardSkeleton";
 
 const App = () => {
 	const [results, setResults] = useState(3);
 	const [rightClicked, setrightClicked] = useState(true);
+	const [cardName, setCardName] = useState("");
 	const { data, loading } = useAllRecentPairs();
+	const { pairData, pairLoading } = useRecentDataOfPair(cardName);
 
 	const slideLeft = () => {
 		if (results! < 3) {
@@ -89,7 +92,7 @@ const App = () => {
 													: { x: 300, opacity: 0.5 }
 											}
 										>
-											<PairCard item={item} />
+											<PairCard item={item} cardName={setCardName} />
 										</motion.div>
 									))}
 								</div>
@@ -107,6 +110,12 @@ const App = () => {
 							fontSize="large"
 						/>
 					</motion.button>
+				</div>
+				<div className="mt-10 items-center text-center">
+					{pairLoading && ""}
+					{pairData?.map((item) => (
+						<p>{item["Market and Exchange Names"]}</p>
+					))}
 				</div>
 			</div>
 		</div>

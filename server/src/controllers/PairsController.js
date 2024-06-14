@@ -14,6 +14,7 @@ exports.baseGet = async (req, res) => {
 			data: result.rows,
 		});
 	} catch (err) {
+		console.log(err);
 		res.status(500).json({
 			status: "error",
 			message: err,

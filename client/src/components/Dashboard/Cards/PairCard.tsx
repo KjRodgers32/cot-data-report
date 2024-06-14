@@ -19,11 +19,19 @@ import {
 
 interface PairDataProp {
 	item: PairData;
+	cardName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const PairCard = ({ item }: PairDataProp) => {
+const PairCard = ({ item, cardName }: PairDataProp) => {
 	return (
-		<Card className="w-[20rem] min-w-[10rem]">
+		<Card
+			className="w-[20rem] min-w-[10rem] hover:cursor-pointer"
+			onClick={() =>
+				cardName(
+					item["Market and Exchange Names"].match(/^(.*?)\s*-/)![1].trim()
+				)
+			}
+		>
 			<Flex alignItems="start">
 				<div className="truncate">
 					<Text>
@@ -73,11 +81,11 @@ const PairCard = ({ item }: PairDataProp) => {
 			</Flex>
 			<Flex className="mt-4 space-x-2">
 				<Text className="truncate">{`${netPositionPercentage(
-					item["Noncommercial Positions-Long (All)"],
-					item["Noncommercial Positions-Short (All)"],
+					Number(item["Noncommercial Positions-Long (All)"]),
+					Number(item["Noncommercial Positions-Short (All)"]),
 					determineSentiment(
-						item["Noncommercial Positions-Long (All)"],
-						item["Noncommercial Positions-Short (All)"]
+						Number(item["Noncommercial Positions-Long (All)"]),
+						Number(item["Noncommercial Positions-Short (All)"])
 					)
 				)}% (${
 					determineSentimentString(
@@ -90,8 +98,8 @@ const PairCard = ({ item }: PairDataProp) => {
 				<Text className="truncate">
 					{numberWithCommas(
 						totalPositionAmount(
-							item["Noncommercial Positions-Long (All)"],
-							item["Noncommercial Positions-Short (All)"]
+							Number(item["Noncommercial Positions-Long (All)"]),
+							Number(item["Noncommercial Positions-Short (All)"])
 						)
 					)}
 				</Text>
