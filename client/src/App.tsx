@@ -112,7 +112,7 @@ const App = () => {
 					</motion.button>
 				</div>
 				<div className="mt-10 items-center text-center">
-					{pairLoading && ""}
+					{pairLoading && "Waiting"}
 					{pairData?.map((item) => (
 						<p>{item["Market and Exchange Names"]}</p>
 					))}
