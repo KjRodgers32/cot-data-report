@@ -1,4 +1,4 @@
-const determineSentiment = (long: number, short: number) => {
+const determineSentiment = (long: number, short: number): number => {
 	if (short > long) {
 		return short;
 	} else {
@@ -33,11 +33,11 @@ const netPositionChangePercentage = (
 	return Math.round(result * 100);
 };
 
-const totalPositionAmount = (long: number, short: number) => {
+const totalPositionAmount = (long: number, short: number): number => {
 	return long + short;
 };
 
-const numberWithCommas = (x: number) => {
+const numberWithCommas = (x: number): string => {
 	return x?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 };
 

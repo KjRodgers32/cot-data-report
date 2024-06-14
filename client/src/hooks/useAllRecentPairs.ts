@@ -11,7 +11,7 @@ export const useAllRecentPairs = () => {
 			try {
 				setLoading(true);
 				const response = await axios.get(
-					"https://cot-data-dashboard.vercel.app/api/v1/latest"
+					"https://cot-data-report-api.vercel.app/api/v1/latest"
 				);
 				setData(response.data.data);
 				setLoading(false);
