@@ -4,7 +4,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import CardSkeleton from "../UI/CardSkeleton";
 import PairCard from "../Dashboard/Cards/PairCard";
-import PairData from "../../types";
+import { PairData } from "../../types";
 
 interface CardDataProp {
 	results: number;
