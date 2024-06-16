@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import PairData from "../types";
+import { PairData } from "../types";
 
 export const usePairHistoricalData = (pair: string) => {
 	const [pairData, setPairData] = useState<PairData[] | []>([]);
