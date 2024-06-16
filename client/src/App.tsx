@@ -1,37 +1,55 @@
 import { useState } from "react";
-import PairCard from "./components/Dashboard/Cards/PairCard";
 import { sidebarItems } from "./components/Dashboard/Constants";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import { motion, AnimatePresence } from "framer-motion";
 import { useAllRecentPairs } from "./hooks/useAllRecentPairs";
 import { useRecentDataOfPair } from "./hooks/useRecentDataOfPair";
-import CardSkeleton from "./components/UI/CardSkeleton";
+import CardHeader from "./components/Header/CardHeader";
+import { usePairHistoricalData } from "./hooks/usesPairHistoricalData";
+import { ResponsiveLine } from "@nivo/line";
 
 const App = () => {
 	const [results, setResults] = useState(3);
-	const [rightClicked, setrightClicked] = useState(true);
+	const [rightClicked, setRightClicked] = useState(true);
 	const [cardName, setCardName] = useState("");
 	const { data, loading } = useAllRecentPairs();
 	const { pairData, pairLoading } = useRecentDataOfPair(cardName);
+	const { netLongData, netShortData, pairTimeDataLoading } =
+		usePairHistoricalData(cardName);
 
-	const slideLeft = () => {
-		if (results! < 3) {
-			return;
-		} else {
-			setrightClicked(false);
-			setResults((prevResults) => prevResults - 3);
-		}
+	// Function to sort data by date
+	const sortDataByDate = (data) => {
+		return data.sort((a, b) => new Date(a.x) - new Date(b.x));
 	};
 
-	const slideRight = () => {
-		if (results! > 9) {
-			return;
-		} else {
-			setrightClicked(true);
-			setResults((prevResults) => prevResults + 3);
-		}
-	};
+	// Sort netLongData and netShortData
+	const sortedNetLongData = sortDataByDate([...netLongData]);
+	const sortedNetShortData = sortDataByDate([...netShortData]);
+
+	const chartData = [
+		{
+			id: `Net Long`,
+			color: "#00c20a",
+			data: sortedNetLongData,
+		},
+
+		{
+			id: `Net Short`,
+			color: "#d71d1d",
+			data: sortedNetShortData,
+		},
+	];
+
+	const colorMap = chartData.reduce((acc, item) => {
+		acc[item.id] = item.color;
+		return acc;
+	}, {});
+
+	// Determine the least, middle, and max dates
+	const allDates = [...sortedNetLongData, ...sortedNetShortData].map(
+		(d) => new Date(d.x)
+	);
+	const minDate = new Date(Math.min(...allDates));
+	const maxDate = new Date(Math.max(...allDates));
+	const middleDate = new Date((minDate.getTime() + maxDate.getTime()) / 2);
 
 	return (
 		<div className="w-full flex overflow-hidden">
@@ -48,74 +66,117 @@ const App = () => {
 					))}
 				</div>
 			</div>
-			<div className="mx-auto mt-9">
-				<div className="flex gap-5 items-center">
-					<motion.button
-						disabled={results <= 3}
-						className="px-3 py-5 shadow-md rounded-md cursor-pointer"
-						whileTap={{ scale: 0.97 }}
-						onClick={slideLeft}
-					>
-						<KeyboardDoubleArrowLeftIcon
-							fontSize="large"
-							htmlColor={`${results <= 3 ? "grey" : "black"}`}
-						/>
-					</motion.button>
-					<AnimatePresence>
-						<div>
-							{loading && (
-								<div className="flex gap-5 bg-white p-2 rounded-md">
-									{Array.from({ length: 3 }).map((_, i) => (
-										<div key={i}>
-											<CardSkeleton />
-										</div>
-									))}
-								</div>
-							)}
-							{data && (
-								<div className="flex gap-5">
-									{data?.slice(results - 3, results).map((item) => (
-										<motion.div
-											key={
-												item["Market and Exchange Names"] +
-												item["As of Date in Form YYYY-MM-DD"]
-											}
-											initial={
-												rightClicked
-													? { x: 300, opacity: 0.5 }
-													: { x: -300, opacity: 0 }
-											}
-											animate={{ x: 0, opacity: 1 }}
-											exit={
-												rightClicked
-													? { x: -300, opacity: 0 }
-													: { x: 300, opacity: 0.5 }
-											}
-										>
-											<PairCard item={item} cardName={setCardName} />
-										</motion.div>
-									))}
-								</div>
-							)}
-						</div>
-					</AnimatePresence>
-					<motion.button
-						disabled={results === 9}
-						className="px-3 py-5 shadow-md rounded-md cursor-pointer"
-						whileTap={{ scale: 0.97 }}
-						onClick={slideRight}
-					>
-						<KeyboardDoubleArrowRightIcon
-							htmlColor={`${results === 9 ? "grey" : "black"}`}
-							fontSize="large"
-						/>
-					</motion.button>
+			<div className="mx-auto mt-9 w-full">
+				<div className="flex gap-5 items-center justify-center">
+					<CardHeader
+						results={results}
+						setResults={setResults}
+						rightClicked={rightClicked}
+						setRightClicked={setRightClicked}
+						setCardName={setCardName}
+						data={data}
+						loading={loading}
+					/>
 				</div>
-				<div className="mt-10 items-center text-center">
+				<div className="mt-[100px] items-center text-center h-[600px] w-full align-center">
 					{pairLoading && ""}
 					{pairData?.map((item) => (
-						<p>{item["Market and Exchange Names"]}</p>
+						<div className="p-5 mb-5 shadow-lg rounded-lg w-fit flex-1 mx-auto">
+							<p>{item["Market and Exchange Names"]}</p>
+						</div>
 					))}
+					{pairTimeDataLoading ||
+					!sortedNetLongData.length ||
+					!sortedNetShortData.length ? (
+						<p>Select Pair To View Chart</p>
+					) : (
+						<ResponsiveLine
+							data={chartData}
+							margin={{ top: 50, right: 110, bottom: 50, left: 100 }}
+							xScale={{
+								type: "time",
+								format: "%Y-%m-%d",
+								precision: "month",
+							}}
+							yScale={{
+								type: "linear",
+								min: "auto",
+								max: "auto",
+								stacked: false,
+								reverse: false,
+							}}
+							theme={{
+								background: "#ffffff",
+								grid: {
+									line: {
+										stroke: "#ffffff",
+									},
+								},
+							}}
+							colors={({ id }) => colorMap[id]}
+							yFormat=">-.2f"
+							curve="linear"
+							axisTop={null}
+							axisRight={null}
+							axisBottom={{
+								tickSize: 5,
+								tickPadding: 5,
+								tickRotation: 0,
+								legend: "COT Release Dates",
+								legendOffset: 36,
+								legendPosition: "middle",
+								truncateTickAt: 0,
+								format: "%b %d %Y", // format for the x-axis ticks
+								tickValues: [minDate, middleDate, maxDate], // only show min, middle, and max dates
+							}}
+							axisLeft={{
+								tickSize: 5,
+								tickPadding: 5,
+								tickRotation: 30,
+								legend: "Open Interset (All)",
+								legendOffset: -60,
+								legendPosition: "middle",
+								truncateTickAt: 0,
+							}}
+							lineWidth={4}
+							pointSize={10}
+							pointColor={{ theme: "background" }}
+							pointBorderWidth={2}
+							pointBorderColor={{ from: "serieColor" }}
+							pointLabel="data.yFormatted"
+							pointLabelYOffset={-12}
+							enableArea={true}
+							areaOpacity={0.05}
+							enableTouchCrosshair={true}
+							useMesh={true}
+							legends={[
+								{
+									anchor: "bottom-right",
+									direction: "column",
+									justify: false,
+									translateX: 100,
+									translateY: 0,
+									itemsSpacing: 0,
+									itemDirection: "left-to-right",
+									itemWidth: 80,
+									itemHeight: 20,
+									itemOpacity: 0.75,
+									symbolSize: 12,
+									symbolShape: "circle",
+									symbolBorderColor: "rgba(0, 0, 0, .5)",
+									effects: [
+										{
+											on: "hover",
+											style: {
+												itemBackground: "rgba(0, 0, 0, .03)",
+												itemOpacity: 1,
+											},
+										},
+									],
+								},
+							]}
+						/>
+					)}
 				</div>
 			</div>
 		</div>

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PairData from "../types";
 
-export const useRecentDataOfPair = (pair: string) => {
-	const [pairData, setPairData] = useState<PairData[] | undefined>(undefined);
-	const [pairLoading, pairSetLoading] = useState(false);
+export const usePairHistoricalData = (pair: string) => {
+	const [pairData, setPairData] = useState<PairData[] | []>([]);
+	const [pairTimeDataLoading, setPairTimeDataLoading] = useState(false);
 
 	const choosePairAbbreviation = (pair: string) => {
 		const pairMap: { [key: string]: string } = {
@@ -23,18 +23,18 @@ export const useRecentDataOfPair = (pair: string) => {
 	};
 
 	useEffect(() => {
+		if (pair === "") return;
 		const fetchData = async () => {
-			if (pair === "") return;
 			try {
-				pairSetLoading(true);
+				setPairTimeDataLoading(true);
 				const pairAbbreviation = choosePairAbbreviation(pair);
 				const response = await axios.get(
-					`https://cot-data-report-api.vercel.app/api/v1/${pairAbbreviation}/latest`
+					`https://cot-data-report-api.vercel.app/api/v1/${pairAbbreviation}`
 				);
 				setPairData(response.data.data);
-				pairSetLoading(false);
+				setPairTimeDataLoading(false);
 			} catch (err) {
-				pairSetLoading(false);
+				setPairTimeDataLoading(false);
 				console.log(err);
 				// TODO: add error message page
 			}
@@ -42,5 +42,19 @@ export const useRecentDataOfPair = (pair: string) => {
 		fetchData();
 	}, [pair]);
 
-	return { pairData, pairLoading };
+	const netLongData = pairData?.map((item) => {
+		return {
+			x: item["As of Date in Form YYYY-MM-DD"],
+			y: item["Noncommercial Positions-Long (All)"],
+		};
+	});
+
+	const netShortData = pairData?.map((item) => {
+		return {
+			x: item["As of Date in Form YYYY-MM-DD"],
+			y: item["Noncommercial Positions-Short (All)"],
+		};
+	});
+
+	return { netLongData, netShortData, pairTimeDataLoading };
 };
