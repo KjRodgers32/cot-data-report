@@ -7,7 +7,7 @@ import {
 	Text,
 } from "@tremor/react";
 
-import PairData from "../../../types";
+import { PairData } from "../../../types";
 import {
 	determineSentiment,
 	determineSentimentString,
@@ -40,8 +40,8 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
 					<Metric className="truncate">
 						{numberWithCommas(
 							determineSentiment(
-								item["Noncommercial Positions-Long (All)"],
-								item["Noncommercial Positions-Short (All)"]
+								Number(item["Noncommercial Positions-Long (All)"]),
+								Number(item["Noncommercial Positions-Short (All)"])
 							)
 						)}
 					</Metric>
@@ -50,12 +50,12 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
 					deltaType={`${
 						netPositionChangePercentage(
 							determineSentiment(
-								item["Noncommercial Positions-Long (All)"],
-								item["Noncommercial Positions-Short (All)"]
+								Number(item["Noncommercial Positions-Long (All)"]),
+								Number(item["Noncommercial Positions-Short (All)"])
 							),
 							determineSentimentString(
-								item["Noncommercial Positions-Long (All)"],
-								item["Noncommercial Positions-Short (All)"]
+								Number(item["Noncommercial Positions-Long (All)"]),
+								Number(item["Noncommercial Positions-Short (All)"])
 							) == "long"
 								? item["Change in Noncommercial-Long (All)"]
 								: item["Change in Noncommercial-Short (All)"]
@@ -66,12 +66,12 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
 				>
 					{netPositionChangePercentage(
 						determineSentiment(
-							item["Noncommercial Positions-Long (All)"],
-							item["Noncommercial Positions-Short (All)"]
+							Number(item["Noncommercial Positions-Long (All)"]),
+							Number(item["Noncommercial Positions-Short (All)"])
 						),
 						determineSentimentString(
-							item["Noncommercial Positions-Long (All)"],
-							item["Noncommercial Positions-Short (All)"]
+							Number(item["Noncommercial Positions-Long (All)"]),
+							Number(item["Noncommercial Positions-Short (All)"])
 						) == "long"
 							? item["Change in Noncommercial-Long (All)"]
 							: item["Change in Noncommercial-Short (All)"]
@@ -89,8 +89,8 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
 					)
 				)}% (${
 					determineSentimentString(
-						item["Noncommercial Positions-Long (All)"],
-						item["Noncommercial Positions-Short (All)"]
+						Number(item["Noncommercial Positions-Long (All)"]),
+						Number(item["Noncommercial Positions-Short (All)"])
 					) == "long"
 						? "Open Longs"
 						: "Open Shorts"
@@ -106,17 +106,17 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
 			</Flex>
 			<ProgressBar
 				value={netPositionPercentage(
-					item["Noncommercial Positions-Long (All)"],
-					item["Noncommercial Positions-Short (All)"],
+					Number(item["Noncommercial Positions-Long (All)"]),
+					Number(item["Noncommercial Positions-Short (All)"]),
 					determineSentiment(
-						item["Noncommercial Positions-Long (All)"],
-						item["Noncommercial Positions-Short (All)"]
+						Number(item["Noncommercial Positions-Long (All)"]),
+						Number(item["Noncommercial Positions-Short (All)"])
 					)
 				)}
 				color={`${
 					determineSentimentString(
-						item["Noncommercial Positions-Long (All)"],
-						item["Noncommercial Positions-Short (All)"]
+						Number(item["Noncommercial Positions-Long (All)"]),
+						Number(item["Noncommercial Positions-Short (All)"])
 					) == "long"
 						? "green"
 						: "red"

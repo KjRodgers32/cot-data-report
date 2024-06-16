@@ -5,6 +5,7 @@ import { useRecentDataOfPair } from "./hooks/useRecentDataOfPair";
 import CardHeader from "./components/Header/CardHeader";
 import { usePairHistoricalData } from "./hooks/usesPairHistoricalData";
 import { ResponsiveLine } from "@nivo/line";
+import { ColorMap } from "./types";
 
 const App = () => {
 	const [results, setResults] = useState(3);
@@ -16,8 +17,15 @@ const App = () => {
 		usePairHistoricalData(cardName);
 
 	// Function to sort data by date
-	const sortDataByDate = (data) => {
-		return data.sort((a, b) => new Date(a.x) - new Date(b.x));
+	const sortDataByDate = (
+		data: {
+			x: string;
+			y: number;
+		}[]
+	) => {
+		return data.sort(
+			(a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()
+		);
 	};
 
 	// Sort netLongData and netShortData
@@ -38,14 +46,14 @@ const App = () => {
 		},
 	];
 
-	const colorMap = chartData.reduce((acc, item) => {
+	const colorMap = chartData.reduce<ColorMap>((acc, item) => {
 		acc[item.id] = item.color;
 		return acc;
 	}, {});
 
 	// Determine the least, middle, and max dates
-	const allDates = [...sortedNetLongData, ...sortedNetShortData].map(
-		(d) => new Date(d.x)
+	const allDates = [...sortedNetLongData, ...sortedNetShortData].map((d) =>
+		new Date(d.x).getTime()
 	);
 	const minDate = new Date(Math.min(...allDates));
 	const maxDate = new Date(Math.max(...allDates));
@@ -115,6 +123,7 @@ const App = () => {
 							}}
 							colors={({ id }) => colorMap[id]}
 							yFormat=">-.2f"
+							xFormat="time:%Y-%m-%d"
 							curve="linear"
 							axisTop={null}
 							axisRight={null}
@@ -143,7 +152,7 @@ const App = () => {
 							pointColor={{ theme: "background" }}
 							pointBorderWidth={2}
 							pointBorderColor={{ from: "serieColor" }}
-							pointLabel="data.yFormatted"
+							pointLabel="yFormatted"
 							pointLabelYOffset={-12}
 							enableArea={true}
 							areaOpacity={0.05}

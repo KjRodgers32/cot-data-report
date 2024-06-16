@@ -1,4 +1,4 @@
-interface PairData {
+export interface PairData {
 	"Market and Exchange Names": string;
 	"As of Date in Form YYYY-MM-DD": string;
 	"Open Interest (All)": number;
@@ -19,4 +19,6 @@ interface PairData {
 	"% of OI-Noncommercial-Spreading (Old)": number;
 }
 
-export default PairData;
+export interface ColorMap {
+	[key: string]: string;
+}
