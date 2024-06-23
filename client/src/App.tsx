@@ -89,7 +89,10 @@ const App = () => {
 				<div className="mt-[100px] items-center text-center h-[600px] w-full align-center">
 					{pairLoading && ""}
 					{pairData?.map((item) => (
-						<div className="p-5 mb-5 shadow-lg rounded-lg w-fit flex-1 mx-auto">
+						<div
+							key={Math.random()}
+							className="p-5 mb-5 shadow-lg rounded-lg w-fit flex-1 mx-auto"
+						>
 							<p>{item["Market and Exchange Names"]}</p>
 						</div>
 					))}
@@ -104,7 +107,7 @@ const App = () => {
 							xScale={{
 								type: "time",
 								format: "%Y-%m-%d",
-								precision: "month",
+								precision: "day",
 							}}
 							yScale={{
 								type: "linear",
