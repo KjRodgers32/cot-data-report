@@ -9,6 +9,6 @@ COPY pull_latest_data.py .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "pull_latest_data.main"]
+CMD ["python", "pull_latest_data.py"]
 
-#CMD [ "python", "data_pull_from_cot_report_api.py" ] use this line for your initial pull.
+# CMD [ "python", "data_pull_from_cot_report_api.py" ] use this line for your initial pull.
