@@ -8,7 +8,7 @@ This is a project idea that I have a for a while, but kept putting it off. Now s
 - Graphically display data for people to view
 - Finally finsih a project that I actually cared about
 
-# Tools Used
+# Tools Used:
 - Python for pulling, cleaning, transforming, and uploading the data
 - Postgres for storing the cleaned data
 - Docker for making the enviorment setup easier
