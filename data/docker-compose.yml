@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  pgdatabase:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=cot_data
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/var/lib/postgres/data
