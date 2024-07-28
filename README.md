@@ -2,13 +2,13 @@
 
 This is a project idea that I have a for a while, but kept putting it off. Now since I'm studying a practicing to become a Data Engineer, I figured there was no time like the present!
 
-# Main things I wanted to accomplish:
+## Main things I wanted to accomplish:
 - Gather a large amount of historical COT (Commitments of Traders) Report data
 - Clean, Transform, and Store this data into a database
 - Graphically display data for people to view
 - Finally, finish a project that I actually care about
 
-# Tools Used:
+## Tools Used:
 - Python for pulling, cleaning, transforming, and uploading the data
 - Postgres for storing the cleaned data
 - Docker for making the environment setup easier
