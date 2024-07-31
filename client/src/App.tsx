@@ -36,13 +36,13 @@ const App = () => {
     {
       id: `Net Long`,
       color: "#00c20a",
-      data: netLongData,
+      data: [netLongData],
     },
 
     {
       id: `Net Short`,
       color: "#d71d1d",
-      data: netShortData,
+      data: [netShortData],
     },
   ];
 
