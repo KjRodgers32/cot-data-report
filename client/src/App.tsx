@@ -52,7 +52,7 @@ const App = () => {
   }, {});
 
   // Determine the least, middle, and max dates
-  const allDates = [...sortedNetLongData, ...sortedNetShortData].map((d) =>
+  const allDates = [...netLongData, ...netShortData].map((d) =>
     new Date(d.x).getTime()
   );
   const minDate = new Date(Math.min(...allDates));
@@ -97,8 +97,8 @@ const App = () => {
             </div>
           ))}
           {pairTimeDataLoading ||
-            !sortedNetLongData.length ||
-            !sortedNetShortData.length ? (
+            !netLongData.length ||
+            !netShortData.length ? (
             <p>Select Pair To View Chart</p>
           ) : (
             <ResponsiveLine
