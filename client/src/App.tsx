@@ -17,20 +17,20 @@ const App = () => {
     usePairHistoricalData(cardName);
 
   // Function to sort data by date
-  const sortDataByDate = (
-    data: {
-      x: string;
-      y: number;
-    }[]
-  ) => {
-    return data.sort(
-      (a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()
-    );
-  };
+  // const sortDataByDate = (
+  //   data: {
+  //     x: string;
+  //     y: number;
+  //   }[]
+  // ) => {
+  //   return data.sort(
+  //     (a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()
+  //   );
+  // };
 
   // Sort netLongData and netShortData
-  const sortedNetLongData = sortDataByDate([...netLongData]);
-  const sortedNetShortData = sortDataByDate([...netShortData]);
+  // const sortedNetLongData = sortDataByDate([...netLongData]);
+  // const sortedNetShortData = sortDataByDate([...netShortData]);
 
   const chartData = [
     {
@@ -52,7 +52,7 @@ const App = () => {
   }, {});
 
   // Determine the least, middle, and max dates
-  const allDates = [...sortedNetLongData, ...sortedNetShortData].map((d) =>
+  const allDates = [...netLongData, ...netShortData].map((d) =>
     new Date(d.x).getTime()
   );
   const minDate = new Date(Math.min(...allDates));
@@ -97,8 +97,8 @@ const App = () => {
             </div>
           ))}
           {pairTimeDataLoading ||
-            !sortedNetLongData.length ||
-            !sortedNetShortData.length ? (
+            !netLongData.length ||
+            !netShortData.length ? (
             <p>Select Pair To View Chart</p>
           ) : (
             <ResponsiveLine
