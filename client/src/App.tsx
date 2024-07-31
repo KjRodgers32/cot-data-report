@@ -17,16 +17,16 @@ const App = () => {
     usePairHistoricalData(cardName);
 
   // Function to sort data by date
-  const sortDataByDate = (
-    data: {
-      x: string;
-      y: number;
-    }[]
-  ) => {
-    return data.sort(
-      (a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()
-    );
-  };
+  // const sortDataByDate = (
+  //   data: {
+  //     x: string;
+  //     y: number;
+  //   }[]
+  // ) => {
+  //   return data.sort(
+  //     (a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()
+  //   );
+  // };
 
   // Sort netLongData and netShortData
   // const sortedNetLongData = sortDataByDate([...netLongData]);
