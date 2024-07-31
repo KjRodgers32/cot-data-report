@@ -29,8 +29,8 @@ const App = () => {
   };
 
   // Sort netLongData and netShortData
-  const sortedNetLongData = sortDataByDate([...netLongData]);
-  const sortedNetShortData = sortDataByDate([...netShortData]);
+  // const sortedNetLongData = sortDataByDate([...netLongData]);
+  // const sortedNetShortData = sortDataByDate([...netShortData]);
 
   const chartData = [
     {
