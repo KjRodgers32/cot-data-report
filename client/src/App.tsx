@@ -16,33 +16,17 @@ const App = () => {
   const { netLongData, netShortData, pairTimeDataLoading } =
     usePairHistoricalData(cardName);
 
-  // Function to sort data by date
-  // const sortDataByDate = (
-  //   data: {
-  //     x: string;
-  //     y: number;
-  //   }[]
-  // ) => {
-  //   return data.sort(
-  //     (a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()
-  //   );
-  // };
-
-  // Sort netLongData and netShortData
-  // const sortedNetLongData = sortDataByDate([...netLongData]);
-  // const sortedNetShortData = sortDataByDate([...netShortData]);
-
   const chartData = [
     {
       id: `Net Long`,
       color: "#00c20a",
-      data: [netLongData],
+      data: netLongData,
     },
 
     {
       id: `Net Short`,
       color: "#d71d1d",
-      data: [netShortData],
+      data: netShortData,
     },
   ];
 
@@ -55,6 +39,7 @@ const App = () => {
   const allDates = [...netLongData, ...netShortData].map((d) =>
     new Date(d.x).getTime()
   );
+
   const minDate = new Date(Math.min(...allDates));
   const maxDate = new Date(Math.max(...allDates));
   const middleDate = new Date((minDate.getTime() + maxDate.getTime()) / 2);
