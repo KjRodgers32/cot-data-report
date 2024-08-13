@@ -42,19 +42,13 @@ export const usePairHistoricalData = (pair: string) => {
     fetchData();
   }, [pair]);
 
-  const netLongData = pairData?.map((item) => {
+  const pairShortAndLongData = pairData?.map((item) => {
     return {
       x: item["As of Date in Form YYYY-MM-DD"],
-      y: item["Noncommercial Positions-Long (All)"],
-    };
-  });
+      long: Number(item["Noncommercial Positions-Long (All)"]),
+      short: Number(item["Noncommercial Positions-Short (All)"]),
+    }
+  })
 
-  const netShortData = pairData?.map((item) => {
-    return {
-      x: item["As of Date in Form YYYY-MM-DD"],
-      y: item["Noncommercial Positions-Short (All)"],
-    };
-  });
-
-  return { netLongData, netShortData, pairTimeDataLoading };
+  return { pairShortAndLongData, pairTimeDataLoading };
 };

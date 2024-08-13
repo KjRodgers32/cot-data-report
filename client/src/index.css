@@ -2,17 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-*::before,
-*::after,
-* {
-	box-sizing: border-box;
-}
-
-* {
-	margin: 0;
-	padding: 0;
+:root {
+  --main-purple: #8f71fd;
+  --main-white: #fff;
 }
 
 html {
-	background-color: #fff;
+  background-color: var(--main-white);
+}
+
+*::before,
+*::after,
+* {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: #fff;
 }
