@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --main-purple: #7546fd;
+  --main-purple: #8f71fd;
   --main-white: #fff;
+}
+
+html {
+  background-color: var(--main-white);
 }
 
 *::before,

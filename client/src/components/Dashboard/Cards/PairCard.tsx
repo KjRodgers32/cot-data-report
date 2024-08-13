@@ -1,10 +1,7 @@
 import {
   BadgeDelta,
-  Card,
   Flex,
-  Metric,
   ProgressBar,
-  Text,
 } from "@tremor/react";
 
 import { PairData } from "../../../types";
@@ -25,7 +22,7 @@ interface PairDataProp {
 const PairCard = ({ item, cardName }: PairDataProp) => {
   return (
     <div
-      className="w-[20rem] min-w-[10rem] hover:cursor-pointer bg-main-white p-5 rounded-lg"
+      className="w-[20rem] min-w-[10rem] hover:cursor-pointer bg-main-white p-5 rounded-lg shadow-xl"
       onClick={() =>
         cardName(
           item["Market and Exchange Names"].match(/^(.*?)\s*-/)![1].trim()
@@ -34,17 +31,17 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
     >
       <Flex alignItems="start">
         <div className="truncate">
-          <div className="text-black">
+          <div className="text-black text-sm">
             {item["Market and Exchange Names"].match(/^(.*?)\s*-/)![1].trim()}
           </div>
-          <Metric className="truncate">
+          <div className="truncate mt-1 text-2xl text-main-purple font-bold">
             {numberWithCommas(
               determineSentiment(
                 Number(item["Noncommercial Positions-Long (All)"]),
                 Number(item["Noncommercial Positions-Short (All)"])
               )
             )}
-          </Metric>
+          </div>
         </div>
         <BadgeDelta
           deltaType={`${netPositionChangePercentage(
@@ -78,8 +75,8 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
           %
         </BadgeDelta>
       </Flex>
-      <Flex className="mt-4 space-x-2">
-        <Text className="truncate">{`${netPositionPercentage(
+      <Flex className="mt-3 space-x-2">
+        <div className="truncate text-black text-sm">{`${netPositionPercentage(
           Number(item["Noncommercial Positions-Long (All)"]),
           Number(item["Noncommercial Positions-Short (All)"]),
           determineSentiment(
@@ -92,15 +89,15 @@ const PairCard = ({ item, cardName }: PairDataProp) => {
         ) == "long"
           ? "Open Longs"
           : "Open Shorts"
-          })`}</Text>
-        <Text className="truncate">
+          })`}</div>
+        <div className="truncate text-black text-sm">
           {numberWithCommas(
             totalPositionAmount(
               Number(item["Noncommercial Positions-Long (All)"]),
               Number(item["Noncommercial Positions-Short (All)"])
             )
           )}
-        </Text>
+        </div>
       </Flex>
       <ProgressBar
         value={netPositionPercentage(

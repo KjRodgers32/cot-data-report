@@ -4,45 +4,21 @@ import { useAllRecentPairs } from "./hooks/useAllRecentPairs";
 import { useRecentDataOfPair } from "./hooks/useRecentDataOfPair";
 import CardHeader from "./components/Header/CardHeader";
 import { usePairHistoricalData } from "./hooks/usesPairHistoricalData";
-import { ResponsiveLine } from "@nivo/line";
-import { ColorMap } from "./types";
-
+import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts"
 const App = () => {
   const [results, setResults] = useState(3);
   const [rightClicked, setRightClicked] = useState(true);
   const [cardName, setCardName] = useState("");
   const { data, loading } = useAllRecentPairs();
   const { pairData, pairLoading } = useRecentDataOfPair(cardName);
-  const { netLongData, netShortData, pairTimeDataLoading } =
+  const { pairShortAndLongData, pairTimeDataLoading } =
     usePairHistoricalData(cardName);
 
-  const chartData = [
-    {
-      id: `Net Long`,
-      color: "#00c20a",
-      data: netLongData,
-    },
+  const maxValues = pairShortAndLongData?.map((item) => {
+    return Math.max(item.short, item.long)
+  })
 
-    {
-      id: `Net Short`,
-      color: "#d71d1d",
-      data: netShortData,
-    },
-  ];
-
-  const colorMap = chartData.reduce<ColorMap>((acc, item) => {
-    acc[item.id] = item.color;
-    return acc;
-  }, {});
-
-  // Determine the least, middle, and max dates
-  const allDates = [...netLongData, ...netShortData].map((d) =>
-    new Date(d.x).getTime()
-  );
-
-  const minDate = new Date(Math.min(...allDates));
-  const maxDate = new Date(Math.max(...allDates));
-  const middleDate = new Date((minDate.getTime() + maxDate.getTime()) / 2);
+  const maxValue = Math.max(...maxValues);
 
   return (
     <div className="w-full flex overflow-hidden">
@@ -82,97 +58,16 @@ const App = () => {
             </div>
           ))}
           {pairTimeDataLoading ||
-            !netLongData.length ||
-            !netShortData.length ? (
+            !pairShortAndLongData.length ? (
             <p>Select Pair To View Chart</p>
           ) : (
-            <ResponsiveLine
-              data={chartData}
-              margin={{ top: 50, right: 110, bottom: 50, left: 100 }}
-              xScale={{
-                type: "time",
-                format: "%Y-%m-%d",
-                precision: "day",
-              }}
-              yScale={{
-                type: "linear",
-                min: "auto",
-                max: "auto",
-                stacked: false,
-                reverse: false,
-              }}
-              theme={{
-                background: "#ffffff",
-                grid: {
-                  line: {
-                    stroke: "#ffffff",
-                  },
-                },
-              }}
-              colors={({ id }) => colorMap[id]}
-              yFormat=">-.2f"
-              xFormat="time:%Y-%m-%d"
-              curve="linear"
-              axisTop={null}
-              axisRight={null}
-              axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: "COT Release Dates",
-                legendOffset: 36,
-                legendPosition: "middle",
-                truncateTickAt: 0,
-                format: "%b %d %Y", // format for the x-axis ticks
-                tickValues: [minDate, middleDate, maxDate], // only show min, middle, and max dates
-              }}
-              axisLeft={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 30,
-                legend: "Open Interset (All)",
-                legendOffset: -60,
-                legendPosition: "middle",
-                truncateTickAt: 0,
-              }}
-              lineWidth={4}
-              pointSize={10}
-              pointColor={{ theme: "background" }}
-              pointBorderWidth={2}
-              pointBorderColor={{ from: "serieColor" }}
-              pointLabel="yFormatted"
-              pointLabelYOffset={-12}
-              enableArea={true}
-              areaOpacity={0.05}
-              enableTouchCrosshair={true}
-              useMesh={true}
-              legends={[
-                {
-                  anchor: "bottom-right",
-                  direction: "column",
-                  justify: false,
-                  translateX: 100,
-                  translateY: 0,
-                  itemsSpacing: 0,
-                  itemDirection: "left-to-right",
-                  itemWidth: 80,
-                  itemHeight: 20,
-                  itemOpacity: 0.75,
-                  symbolSize: 12,
-                  symbolShape: "circle",
-                  symbolBorderColor: "rgba(0, 0, 0, .5)",
-                  effects: [
-                    {
-                      on: "hover",
-                      style: {
-                        itemBackground: "rgba(0, 0, 0, .03)",
-                        itemOpacity: 1,
-                      },
-                    },
-                  ],
-                },
-              ]}
-            />
+            <LineChart width={1400} height={600} data={pairShortAndLongData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }} className='mx-auto'>
+              <Line type="monotone" dataKey="long" stroke="green" strokeWidth={2} />
+              <Line type="monotone" dataKey="short" stroke='red' strokeWidth={2} />
+              <XAxis dataKey="x" />
+              <YAxis dataKey='long' domain={[0, maxValue]} />
+              <Tooltip />
+            </LineChart>
           )}
         </div>
       </div>
