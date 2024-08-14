@@ -6,7 +6,6 @@ import CardHeader from "./components/Header/CardHeader";
 import { usePairHistoricalData } from "./hooks/usesPairHistoricalData";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts"
 const App = () => {
-  const [results, setResults] = useState(3);
   const [rightClicked, setRightClicked] = useState(true);
   const [cardName, setCardName] = useState("");
   const { data, loading } = useAllRecentPairs();
@@ -38,8 +37,6 @@ const App = () => {
       <div className="mx-auto mt-9 w-full">
         <div className="flex gap-5 items-center justify-center">
           <CardHeader
-            results={results}
-            setResults={setResults}
             rightClicked={rightClicked}
             setRightClicked={setRightClicked}
             setCardName={setCardName}

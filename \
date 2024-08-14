@@ -1,0 +1,7 @@
+const MobileCardHeader = () => {
+  return (
+    <div>MobileCardHeader</div>
+  )
+}
+
+export default MobileCardHeader
