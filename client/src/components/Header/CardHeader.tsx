@@ -13,7 +13,7 @@ const CardHeader = ({
 }: CardDataProp) => {
 
   const isMd = useMedia('(min-width: 768px)')
-  const isLg = useMedia('(min-width: 1042px)')
+  const isLg = useMedia('(min-width: 1210px)')
 
   return (
     <>
