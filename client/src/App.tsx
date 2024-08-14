@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { sidebarItems } from "./components/Dashboard/Constants";
 import { useAllRecentPairs } from "./hooks/useAllRecentPairs";
 import { useRecentDataOfPair } from "./hooks/useRecentDataOfPair";
 import CardHeader from "./components/Header/CardHeader";
@@ -21,19 +20,6 @@ const App = () => {
 
   return (
     <div className="w-full flex overflow-hidden">
-      <div className="w-[20em] bg-[#111827] h-[100vh]">
-        <div className="pt-6">
-          {sidebarItems.map((item, index) => (
-            <div
-              key={index}
-              className="flex text-[#ccc] items-center gap-3 text-[1.25em] pl-5 py-4 hover:bg-[#171f2e] cursor-pointer"
-            >
-              <span>{item.icon}</span>
-              <p>{item.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
       <div className="mx-auto mt-9 w-full">
         <div className="flex gap-5 items-center justify-center">
           <CardHeader
