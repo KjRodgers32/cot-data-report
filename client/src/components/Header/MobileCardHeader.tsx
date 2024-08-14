@@ -85,13 +85,13 @@ const MobileCardHeader = ({
         </div>
       </AnimatePresence>
       <motion.button
-        disabled={results === 9}
+        disabled={results === 8}
         className="px-3 py-5 shadow-md rounded-md cursor-pointer"
         whileTap={{ scale: 0.97 }}
         onClick={slideRightMobile}
       >
         <KeyboardDoubleArrowRightIcon
-          htmlColor={`${results === 9 ? "grey" : "black"}`}
+          htmlColor={`${results === 8 ? "grey" : "black"}`}
           fontSize="large"
         />
       </motion.button>
