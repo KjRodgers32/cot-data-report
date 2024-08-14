@@ -30,3 +30,13 @@ export interface CardDataProp {
   data: PairData[] | undefined;
   loading: boolean;
 }
+
+export interface PairDataProp {
+  item: PairData;
+  size: string;
+  cardName: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface SkeletonCardProp {
+  size: string;
+}

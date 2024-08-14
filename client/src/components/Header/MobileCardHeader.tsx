@@ -37,7 +37,7 @@ const MobileCardHeader = ({
     <>
       <motion.button
         disabled={results <= 1}
-        className="px-3 py-5 shadow-md rounded-md cursor-pointer"
+        className="px-2 py-3 shadow-md rounded-md cursor-pointer"
         whileTap={{ scale: 0.97 }}
         onClick={slideLeftMobile}
       >
@@ -52,7 +52,7 @@ const MobileCardHeader = ({
             <div className="flex gap-5 bg-white p-2 rounded-md">
               {Array.from({ length: 1 }).map((_, i) => (
                 <div key={i}>
-                  <CardSkeleton />
+                  <CardSkeleton size="sm" />
                 </div>
               ))}
             </div>
@@ -77,7 +77,7 @@ const MobileCardHeader = ({
                       : { x: 300, opacity: 0.5 }
                   }
                 >
-                  <PairCard item={item} cardName={setCardName} />
+                  <PairCard size="sm" item={item} cardName={setCardName} />
                 </motion.div>
               ))}
             </div>
@@ -86,7 +86,7 @@ const MobileCardHeader = ({
       </AnimatePresence>
       <motion.button
         disabled={results === 8}
-        className="px-3 py-5 shadow-md rounded-md cursor-pointer"
+        className="px-2 py-3 shadow-md rounded-md cursor-pointer"
         whileTap={{ scale: 0.97 }}
         onClick={slideRightMobile}
       >

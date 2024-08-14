@@ -53,7 +53,7 @@ const DesktopCardHeader = ({
             <div className="flex gap-5 bg-white p-2 rounded-md">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i}>
-                  <CardSkeleton />
+                  <CardSkeleton size="lg" />
                 </div>
               ))}
             </div>
@@ -78,7 +78,7 @@ const DesktopCardHeader = ({
                       : { x: 300, opacity: 0.5 }
                   }
                 >
-                  <PairCard item={item} cardName={setCardName} />
+                  <PairCard size="lg" item={item} cardName={setCardName} />
                 </motion.div>
               ))}
             </div>

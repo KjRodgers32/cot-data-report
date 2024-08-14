@@ -52,7 +52,7 @@ const TabletCardHeader = ({
             <div className="flex gap-5 bg-white p-2 rounded-md">
               {Array.from({ length: 2 }).map((_, i) => (
                 <div key={i}>
-                  <CardSkeleton />
+                  <CardSkeleton size="md" />
                 </div>
               ))}
             </div>
@@ -77,7 +77,7 @@ const TabletCardHeader = ({
                       : { x: 300, opacity: 0.5 }
                   }
                 >
-                  <PairCard item={item} cardName={setCardName} />
+                  <PairCard size="md" item={item} cardName={setCardName} />
                 </motion.div>
               ))}
             </div>
