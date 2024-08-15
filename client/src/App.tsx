@@ -4,6 +4,7 @@ import { useRecentDataOfPair } from "./hooks/useRecentDataOfPair";
 import CardHeader from "./components/Header/CardHeader";
 import { usePairHistoricalData } from "./hooks/usesPairHistoricalData";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts"
+import NavBar from "./components/NavBar/NavBar";
 const App = () => {
   const [rightClicked, setRightClicked] = useState(true);
   const [cardName, setCardName] = useState("");
@@ -20,7 +21,8 @@ const App = () => {
 
   return (
     <div className="w-full flex overflow-hidden">
-      <div className="mx-auto mt-9 w-full">
+      <div className="mx-auto w-full">
+        <NavBar />
         <div className="flex gap-5 items-center justify-center">
           <CardHeader
             rightClicked={rightClicked}
