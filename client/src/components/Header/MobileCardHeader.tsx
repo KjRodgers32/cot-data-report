@@ -37,12 +37,12 @@ const MobileCardHeader = ({
     <>
       <motion.button
         disabled={results <= 1}
-        className="px-2 py-3 shadow-md rounded-md cursor-pointer"
+        className="px-2 py-3 rounded-md cursor-pointer"
         whileTap={{ scale: 0.97 }}
         onClick={slideLeftMobile}
       >
         <KeyboardDoubleArrowLeftIcon
-          fontSize="large"
+          fontSize="medium"
           htmlColor={`${results <= 1 ? "grey" : "black"}`}
         />
       </motion.button>
@@ -86,13 +86,13 @@ const MobileCardHeader = ({
       </AnimatePresence>
       <motion.button
         disabled={results === 8}
-        className="px-2 py-3 shadow-md rounded-md cursor-pointer"
+        className="px-2 py-3 rounded-md cursor-pointer animate-pulse"
         whileTap={{ scale: 0.97 }}
         onClick={slideRightMobile}
       >
         <KeyboardDoubleArrowRightIcon
           htmlColor={`${results === 8 ? "grey" : "black"}`}
-          fontSize="large"
+          fontSize="medium"
         />
       </motion.button>
     </>
