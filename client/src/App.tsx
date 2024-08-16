@@ -23,7 +23,7 @@ const App = () => {
     <div className="w-full flex overflow-hidden">
       <div className="mx-auto w-full">
         <NavBar />
-        <div className="flex gap-5 items-center justify-center">
+        <div className="flex gap-5 items-center justify-center mt-3">
           <CardHeader
             rightClicked={rightClicked}
             setRightClicked={setRightClicked}
