@@ -40,3 +40,24 @@ export interface PairDataProp {
 export interface SkeletonCardProp {
   size: string;
 }
+
+export interface PairShortAndLongDataProp {
+  x: string;
+  long: number;
+  short: number;
+}
+
+export interface AppDataProp {
+  rightClicked: boolean;
+  setRightClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  setCardName: React.Dispatch<React.SetStateAction<string>>;
+  data: PairData[] | undefined;
+  loading: boolean;
+  pairData: PairData[] | undefined;
+  pairLoading: boolean;
+  pairTimeDataLoading: boolean;
+  pairShortAndLongData: PairShortAndLongDataProp[] | [];
+  maxValue: number;
+}
+
+
