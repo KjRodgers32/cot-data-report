@@ -5,6 +5,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import CardSkeleton from "../UI/CardSkeleton";
 import PairCard from "../Dashboard/Cards/PairCard";
+import { useSwipeable } from 'react-swipeable'
 
 const MobileCardHeader = ({
   rightClicked,
@@ -33,6 +34,13 @@ const MobileCardHeader = ({
     }
   };
 
+  const handlers =
+    useSwipeable({
+      onSwipedLeft: () => { slideRightMobile },
+      onSwipedRight: () => { slideLeftMobile }
+    })
+
+
   return (
     <>
       <motion.button
@@ -58,7 +66,7 @@ const MobileCardHeader = ({
             </div>
           )}
           {data && (
-            <div className="flex gap-5">
+            <div {...handlers} className="flex gap-5">
               {data?.slice(results - 1, results).map((item) => (
                 <motion.div
                   key={
