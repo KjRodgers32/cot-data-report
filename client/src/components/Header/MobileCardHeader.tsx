@@ -5,7 +5,7 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import CardSkeleton from "../UI/CardSkeleton";
 import PairCard from "../Dashboard/Cards/PairCard";
-import SwipeableViews from 'react-swipeable-views';
+import { useSwipeable } from 'react-swipeable'
 
 const MobileCardHeader = ({
   rightClicked,
@@ -34,6 +34,13 @@ const MobileCardHeader = ({
     }
   };
 
+  const handlers =
+    useSwipeable({
+      onSwipedLeft: () => { slideRightMobile },
+      onSwipedRight: () => { slideLeftMobile }
+    })
+
+
   return (
     <>
       <motion.button
@@ -59,31 +66,29 @@ const MobileCardHeader = ({
             </div>
           )}
           {data && (
-            <SwipeableViews onSwipedLeft={slideRightMobile} onSwipedRight={slideLeftMobile} className='no-scrollbar overflow-y-scroll'>
-              <div className="flex gap-5">
-                {data?.slice(results - 1, results).map((item) => (
-                  <motion.div
-                    key={
-                      item["Market and Exchange Names"] +
-                      item["As of Date in Form YYYY-MM-DD"]
-                    }
-                    initial={
-                      rightClicked
-                        ? { x: 300, opacity: 0.5 }
-                        : { x: -300, opacity: 0 }
-                    }
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={
-                      rightClicked
-                        ? { x: -300, opacity: 0 }
-                        : { x: 300, opacity: 0.5 }
-                    }
-                  >
-                    <PairCard size="sm" item={item} cardName={setCardName} />
-                  </motion.div>
-                ))}
-              </div>
-            </SwipeableViews>
+            <div {...handlers} className="flex gap-5">
+              {data?.slice(results - 1, results).map((item) => (
+                <motion.div
+                  key={
+                    item["Market and Exchange Names"] +
+                    item["As of Date in Form YYYY-MM-DD"]
+                  }
+                  initial={
+                    rightClicked
+                      ? { x: 300, opacity: 0.5 }
+                      : { x: -300, opacity: 0 }
+                  }
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={
+                    rightClicked
+                      ? { x: -300, opacity: 0 }
+                      : { x: 300, opacity: 0.5 }
+                  }
+                >
+                  <PairCard size="sm" item={item} cardName={setCardName} />
+                </motion.div>
+              ))}
+            </div>
           )}
         </div>
       </AnimatePresence>
