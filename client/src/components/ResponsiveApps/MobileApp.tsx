@@ -1,6 +1,6 @@
 import { AppDataProp } from "../../types";
 import NavBar from "../NavBar/NavBar";
-import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+// import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 import MobileCardHeader from "../Header/MobileCardHeader";
 
 const MobileApp = ({
@@ -9,12 +9,12 @@ const MobileApp = ({
 	setCardName,
 	data,
 	loading,
-	pairData,
-	pairLoading,
-	pairTimeDataLoading,
-	pairShortAndLongData,
-	maxValue,
-}: AppDataProp) => {
+}: // pairData,
+// pairLoading,
+// pairTimeDataLoading,
+// pairShortAndLongData,
+// maxValue,
+AppDataProp) => {
 	return (
 		<div className="w-full flex overflow-hidden">
 			<div className="mx-auto w-full">
